@@ -129,47 +129,6 @@
             display: none;
         }
 
-        /* ------------------ FLASH / SPLASH SCREEN ------------------ */
-        #splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(20, 0, 5, 0.7), rgba(80, 0, 15, 0.75)), 
-                        url('https://images.unsplash.com/photo-1532375810709-75b1da00537c?w=1600&auto=format&fit=crop') center/cover no-repeat;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            text-align: center;
-        }
-
-        .splash-title {
-            font-size: 4rem;
-            font-weight: 900;
-            color: #FFD700;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            text-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 50px rgba(220, 20, 60, 0.8);
-            animation: pulse 2s infinite alternate;
-        }
-
-        .splash-subtitle {
-            font-size: 1.5rem;
-            color: #ffffff;
-            margin-top: 15px;
-            letter-spacing: 2px;
-            font-weight: 600;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.98); opacity: 0.8; }
-            100% { transform: scale(1.05); opacity: 1; }
-        }
-
         /* ------------------ MAIN CONTENT ------------------ */
         #main-content {
             display: none;
@@ -179,17 +138,17 @@
             align-items: center;
         }
 
-        .main-wrapper {
+        .top-bar {
             max-width: 950px;
             width: 100%;
             display: flex;
-            flex-direction: column;
-            gap: 45px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
         }
 
         .page-title {
-            text-align: center;
-            font-size: 2.8rem;
+            font-size: 2.4rem;
             font-weight: 900;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -197,7 +156,35 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 5px 20px rgba(220, 20, 60, 0.6);
-            margin-bottom: 10px;
+        }
+
+        .logout-btn {
+            background: rgba(220, 20, 60, 0.2);
+            border: 1px solid #FF4D6D;
+            color: #ffffff;
+            padding: 10px 22px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #DC143C;
+            box-shadow: 0 0 15px rgba(220, 20, 60, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .main-wrapper {
+            max-width: 950px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 45px;
         }
 
         .container {
@@ -310,11 +297,18 @@
         code {
             font-family: inherit;
         }
+
+        @media (max-width: 600px) {
+            .top-bar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 1. LOGIN PAGE -->
     <div id="login-screen">
         <div class="login-card">
             <h2>Portal Login</h2>
@@ -333,19 +327,14 @@
         </div>
     </div>
 
-    <!-- 2. FLASH / SPLASH SCREEN -->
-    <div id="splash-screen">
-        <div class="splash-title">GUHAN</div>
-        <div class="splash-subtitle">Welcome to Python Lab Repository</div>
-    </div>
-
-    <!-- 3. PROTECTED CONTENT -->
     <div id="main-content">
-        <h1 class="page-title">Python Lab Repository</h1>
+        <div class="top-bar">
+            <h1 class="page-title">Python Lab Repository</h1>
+            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+        </div>
 
         <div class="main-wrapper">
 
-            <!-- LAB ACTIVITY TWO -->
             <div class="container">
                 <header>
                     <h2>Lab Activity Two</h2>
@@ -384,7 +373,6 @@ give_clothing_advice(temperature)</code></pre>
                 </div>
             </div>
 
-            <!-- LAB ACTIVITY THREE -->
             <div class="container">
                 <header>
                     <h2>Lab Activity Three</h2>
@@ -416,7 +404,6 @@ for student in sorted_student_names:
                 </div>
             </div>
 
-            <!-- LAB ACTIVITY FOUR -->
             <div class="container">
                 <header>
                     <h2>Lab Activity Four</h2>
@@ -463,11 +450,8 @@ print("Maximum Nutritional Values (Calories, Carbs, Proteins): ", max_values)</c
             const isLoggedIn = sessionStorage.getItem('isLoggedIn');
             
             if (isLoggedIn === 'true') {
-                // Hide login screen
                 document.getElementById('login-screen').style.display = 'none';
-                
-                // Show splash screen for 2 seconds (2000ms) on refresh
-                showSplashScreen(2000);
+                document.getElementById('main-content').style.display = 'flex';
             }
         });
 
@@ -481,29 +465,23 @@ print("Maximum Nutritional Values (Calories, Carbs, Proteins): ", max_values)</c
             if (un === 'admin' && pw === '1619') {
                 errorMsg.style.display = 'none';
                 
-                // Save session so page refresh remembers logged in status
+                // Store session
                 sessionStorage.setItem('isLoggedIn', 'true');
                 
-                // Hide Login Screen
+                // Switch views directly without splash
                 document.getElementById('login-screen').style.display = 'none';
-                
-                // Play Flash Screen on first login (e.g. 6 seconds or 2 seconds)
-                showSplashScreen(2000);
-
+                document.getElementById('main-content').style.display = 'flex';
             } else {
                 errorMsg.style.display = 'block';
             }
         }
 
-        // Helper function to trigger splash screen display for specified duration
-        function showSplashScreen(durationMs) {
-            const splashScreen = document.getElementById('splash-screen');
-            splashScreen.style.display = 'flex';
-            
-            setTimeout(() => {
-                splashScreen.style.display = 'none';
-                document.getElementById('main-content').style.display = 'flex';
-            }, durationMs);
+        function handleLogout() {
+            sessionStorage.removeItem('isLoggedIn');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('main-content').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
         }
 
         function copyCode(elementId, btnElement) {
